@@ -5,42 +5,44 @@ class Star_Cinema:
 
 class Hall(Star_Cinema):
     def __init__(self, rows, cols, hall_no):
-        self.seats = {}
-        self.show_list = []
+        self._seats = {}
+        self._show_list = []
         self.rows = rows
         self.cols = cols
-        self.hall_no = hall_no
+        self.__hall_no = hall_no
         
     def entry_show(self, id, movie_name, time):
         show = (id,movie_name,time)
-        self.show_list.append(show)
+        self._show_list.append(show)
         for i in range(self.rows):
             for j in range(self.cols):
-                self.seats[id,i,j]=0
+                self._seats[id,i,j]=0
         
     def view_show_list(self):
         print('----------------')
-        for show in self.show_list:
+        for show in self._show_list:
             print(f"MOVIE NAME: {show[1]}({show[0]}) SHOW ID: {show[0]} TIME: {show[2]}")
         print('----------------')
     
     def view_available_seats(self, id):
-        for s in self.show_list:
+        for s in self._show_list:
             if id == s[0]:
+                print()
                 for i in range(self.rows):
                     print(end='[ ')
                     for j in range(self.cols):
-                        print(f'{self.seats[id,i,j]}',end=' ')
+                        print(f'{self._seats[id,i,j]}',end=' ')
                     print(']')
                 return
         print('\nNO SHOW AVAILABLE.')
 
-    def book_seats(self, id, row, col):
-        for s in self.show_list:
+    def book_seats(self, id, seat):
+        for s in self._show_list:
             if id == s[0]:
+                row,col = seat
                 if 0<row<=self.rows and 0<col<=self.cols:
-                    if self.seats[id,row-1,col-1]==0:
-                        self.seats[id,row-1,col-1]=1
+                    if self._seats[id,row-1,col-1]==0:
+                        self._seats[id,row-1,col-1]=1
                         print(f"\nSEAT ({row},{col}) IS BOOKED FOR YOU.")
                     else:
                         print("\nSEAT IS ALREADY BOOKED.")
@@ -74,7 +76,7 @@ while True:
         id = int(input('ENTER SHOW ID: '))
         row = int(input('ENTER ROW NO: '))
         col = int(input('ENTER COLUMN NO: '))
-        hall.book_seats(id,row,col)
+        hall.book_seats(id,(row,col))
     elif option == 4:
         break
     else:
